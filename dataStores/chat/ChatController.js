@@ -19,7 +19,7 @@ class ChatController {
 	disconnect(req, res) {
 		const index = storage.users.indexOf(req.body.username);
 		if (index !== -1) {
-			this.chat.users.splice(index, 1);
+			storage.users.splice(index, 1);
 			return res.status(200).send();
 		}
 		return res.status(400).send();
