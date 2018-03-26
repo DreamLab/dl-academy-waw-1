@@ -3,9 +3,9 @@ const router = require('./router');
 const bodyParser = require('body-parser');
 const app = express();
 
-app.listen(3001, () => console.log('App listening on port 3000!'));
+app.listen(3000, () => console.log('App listening on port 3000!'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-router(app);
+app.use('/', router);
 
 module.exports = app;
