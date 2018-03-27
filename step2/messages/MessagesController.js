@@ -1,4 +1,5 @@
 class MessagesController {
+
 	constructor() {
 		this.messages = {
 			messages: [
@@ -23,9 +24,11 @@ class MessagesController {
 			]
 		}
 	}
+
 	getMessages(req, res) {
 		return res.status(200).json({messages: this.messages});
 	}
+
 }
 
 module.exports = MessagesController;
