@@ -1,9 +1,7 @@
-const messagesController = new(require('../getMessages/messages/MessagesController'));
 const router = require('express').Router();
 
-router.get('/messages', messagesController.getMessages);
-app.use(function(req, res) {
-	res.status(404).send({ error: 'Not found'});
-});
+const chatController = new(require('../step2/chat/ChatController'));
+
+router.get('/messages', chatController.getMessages);
 
 module.exports = router;

@@ -18,6 +18,7 @@
   "homepage": "https://github.com/DreamLab/dl-academy-waw-1#readme",
   "dependencies": {
     "body-parser": "^1.18.2",
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "uuid": "^3.2.1"
   }
 }
