@@ -1,4 +1,5 @@
-const storage = new(require('../dataStores/Storage'));
+const Storage = require('../dataStores/Storage');
+const storage = new Storage();
 
 class ChatController {
 

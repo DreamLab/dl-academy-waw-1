@@ -12,7 +12,8 @@ class Storage {
 			username: username,
 			body: body,
 			timestamp: Date.now(),
-			id: uuidv4()});
+			id: uuidv4()
+		});
 	}
 
 	getMessages() {
@@ -20,8 +21,8 @@ class Storage {
 	}
 
 	connect(username) {
-		const index = this.users.indexOf(username);
-		if (index === -1) {
+		const isUserConnected = this.users.includes(username);
+		if (!isUserConnected) {
 			this.users.push(username);
 			return username;
 		}
