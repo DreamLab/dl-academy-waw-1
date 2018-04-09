@@ -18,7 +18,7 @@ class ChatController {
 		if (connected) {
 			return res.status(200).json({connected});
 		}
-		return res.status(400).send();
+		return res.status(400).json({error: 'User is already connected.'});
 	}
 
 	disconnect(req, res) {
