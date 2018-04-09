@@ -8,7 +8,7 @@ class ChatController {
 	}
 
 	saveMessage(req, res) {
-		const message = storage.saveMessage(req.body.sender, req.body.body);
+		const message = storage.saveMessage(req.body.username, req.body.body);
 		return res.status(200).json({message});
 	}
 

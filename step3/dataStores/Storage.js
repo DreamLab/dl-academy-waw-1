@@ -7,9 +7,9 @@ class Storage {
 			this.users = [];
 	}
 
-	saveMessage(sender, body) {
+	saveMessage(username, body) {
 		this.messages.push({
-			sender: sender,
+			username: username,
 			body: body,
 			timestamp: Date.now(),
 			id: uuidv4()});

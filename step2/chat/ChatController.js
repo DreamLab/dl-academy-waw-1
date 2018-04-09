@@ -1,6 +1,5 @@
 const storage = new(require('../dataStores/Storage'));
 
-
 class ChatController {
 
 	getMessages(req, res) {
