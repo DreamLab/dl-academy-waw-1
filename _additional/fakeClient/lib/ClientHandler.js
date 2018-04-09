@@ -12,6 +12,7 @@ class ClientHandler {
 		this._logPrefix = `[${address}]               `.substr(0, 23);
 		this._messageCount = 0;
 		this._nickname = DataGenerator.getNickname();
+		this._messageTimeout = null;
 		
 		this._log(`New handler created.`);
 	}
@@ -27,8 +28,28 @@ class ClientHandler {
 	}
 	
 	/**
+	 * Stops message loop and sends http request to '/disconnect' endpoint.
+	 * @returns {Promise.<undefined>}
+	 */
+	disconnect() {
+		this._isRunning = false;
+		clearTimeout(this._messageTimeout);
+		
+		const params = {
+			method: 'POST',
+			url: `${this._address}/disconnect`,
+			form: {
+				username: this._nickname
+			}
+		};
+		
+		return this._makeRequest(params)
+			.then(() => this._log(`Disconnected.`));
+	}
+	
+	/**
 	 * Performs registration request.
-	 * @returns {Promise.<object>}
+	 * @returns {Promise.<undefined>}
 	 * @private
 	 */
 	_register() {
@@ -73,11 +94,13 @@ class ClientHandler {
 	_runMessageWorker() {
 		const delayTime = Math.floor(Math.random() * MESSAGE_DELAY_MAX) + MESSAGE_DELAY_MIN;
 		
+		if(!this._isRunning) {
+			return;
+		}
+		
 		this._sendMessage()
 			.then(() => {
-				if(this._isRunning) {
-					setTimeout(() => this._runMessageWorker(), delayTime);
-				}
+				this._messageTimeout = setTimeout(() => this._runMessageWorker(), delayTime);
 			});
 	}
 	
