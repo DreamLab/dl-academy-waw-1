@@ -9,6 +9,7 @@ class ChatController {
 	}
 
 	saveMessage(req, res) {
+		console.log(`[MESSAGE] ${req.body.username}: ${req.body.body}`);
 		const message = storage.saveMessage(req.body.username, req.body.body);
 		return res.status(200).json({message});
 	}
@@ -16,6 +17,7 @@ class ChatController {
 	connect(req, res) {
 		const connected = storage.connect(req.body.username);
 		if (connected) {
+			console.log(`[USER] ${req.body.username} connected`);
 			return res.status(200).json({connected});
 		}
 		return res.status(400).json({error: 'User is already connected.'});
@@ -24,7 +26,8 @@ class ChatController {
 	disconnect(req, res) {
 		const disconnected = storage.disconnect(req.body.username);
 		if (disconnected) {
-			return res.status(200).json({disconnected})
+			console.log(`[USER] ${req.body.username} disconnected`);
+			return res.status(200).json({disconnected});
 		}
 		return res.status(400).send();
 	}
