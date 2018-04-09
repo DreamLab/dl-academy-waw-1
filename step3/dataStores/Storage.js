@@ -3,17 +3,19 @@ const uuidv4 = require('uuid/v4');
 class Storage {
 
 	constructor () {
-			this.messages = [];
-			this.users = [];
+		this.messages = [];
+		this.users = [];
 	}
 
 	saveMessage(username, body) {
-		this.messages.push({
+		const message = {
 			username: username,
 			body: body,
 			timestamp: Date.now(),
 			id: uuidv4()
-		});
+		};
+		this.messages.push(message);
+		return message;
 	}
 
 	getMessages() {
@@ -26,6 +28,7 @@ class Storage {
 			this.users.push(username);
 			return username;
 		}
+		return false;
 	}
 
 	disconnect(username) {
@@ -34,6 +37,7 @@ class Storage {
 			this.users.splice(index, 1);
 			return username;
 		}
+		return false;
 	}
 
 	getUsers() {
