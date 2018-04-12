@@ -6,7 +6,7 @@ const Logger = require('./Logger');
 const MESSAGE_DELAY_MIN = 1000;
 const MESSAGE_DELAY_MAX = 5000;
 
-class ClientHandler {
+class Client {
 	constructor(address) {
 		this._address = `http://${address}`;
 		this._isRunning = false;
@@ -126,4 +126,4 @@ class ClientHandler {
 	}
 }
 
-module.exports = ClientHandler;
+module.exports = Client;
