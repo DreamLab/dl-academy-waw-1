@@ -1,12 +1,20 @@
 const Sentencer = require('sentencer');
 
+/**
+ * Generates a pseudo-random nickname.
+ * @returns {string}
+ */
 function getNickname() {
 	return Sentencer.make('{{adjective}}-{{noun}}');
 }
 
+/**
+ * Generates a pseudo-random message.
+ * @returns {string}
+ */
 function getMessage() {
 	const string = Sentencer.make(_getSentenceStructure());
-	return string.charAt(0).toUpperCase() + string.slice(1);
+	return _capitalizeFirstLetter(string);
 }
 
 const sentenceStructures = [
@@ -22,8 +30,23 @@ const sentenceStructures = [
 	"...but {{noun}}'s {{noun}} is not very {{adjective}}."
 ];
 
+/**
+ * Returns random sentence structure.
+ * @returns {string}
+ * @private
+ */
 function _getSentenceStructure() {
 	return sentenceStructures[Math.floor(Math.random() * (sentenceStructures.length))];
+}
+
+/**
+ * Capitalizes first letter of the string.
+ * @param string String to capitalize.
+ * @returns {string} Capitalized string.
+ * @private
+ */
+function _capitalizeFirstLetter(string) {
+	return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 module.exports = {
