@@ -18,7 +18,7 @@
             </div>
         </section> 
         <section id="textInput" class="container">
-            <form method="POST">
+            <form method="">
                 <fieldset>                        
                     <input class="form-control" id="body" rows="3" size="300" placeholder="Type your message...">
                 </fieldset>                   
@@ -52,7 +52,7 @@
                 dataType: 'JSON',
                 data: message,
                 success: function(response) {
-                    alert("success");
+                    alert(JSON.stringify(response.message));
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(textStatus, errorThrown);
