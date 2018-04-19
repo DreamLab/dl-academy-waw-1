@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Dreamlab Academy Warsaw</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" href="style.css">
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <section id="loginForm">
+            <div class="container">
+                <form id="loginForm" method="POST" action="/">
+                    <div class="form-group">
+                        <label for="nameInput">Name</label>
+                        <input type="name" class="form-control" id="nameInput" placeholder="Enter Name">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </section>
+        <section id="messagesSection" class="container" style="display:none;">
+            <div class="content">
+                <div id="messages"></div>
+            </div>
+        </section> 
+        <section id="textInput" class="container" style="display:none;">
+            <form id="messageForm" method="POST">
+                <div class="form-group">                        
+                    <input type="text" class="form-control form-control-lg" id="messageBody" placeholder="Type your message...">
+                </div>                   
+            </form>
+            <form action="#" id="logout">
+                <button type="submit" class="btn btn-primary mb-2">Logout</button>
+            </form>            
+        </section>
+        <script>
+            var data = {};
+            var name = '';
+            var currentMessages = new Set();
+
+            function showMessages () {
+                $.ajax({
+                    type: 'GET',
+                    url: 'http://localhost:3000/api/messages',
+                    dataType: "JSON",
+                    data: data,
+                    xhrFields: {
+                        withCredentials: false
+                    },
+                    success: function(data) {
+                        for(var i = 0; i < data.messages.length; i++) {
+                            var timestamp = new Date(parseInt(data.messages[i].timestamp));
+                            var czas = timestamp.toUTCString().slice(0, 22);
+                            if (!currentMessages.has(data.messages[i].id)) {
+                                currentMessages.add(data.messages[i].id);
+                                $('#messages').append('<div id="' + data.messages[i].id + '"><div class="messageWrapper"><div class="messageContent">' + '<div class="username">' + data.messages[i].username + ':</div><div class="messageBody" id="messageBody_'  +i + '">' + data.messages[i].body + '</div></div><div class="messageTime">' + czas + '</div></div></div>');
+                            }                             
+                        }                    
+                    }
+                });
+            }            
+            
+            function sendMessage (e) {
+                e.preventDefault(); 
+                var messageBody = $('#messageBody').val();  
+                var message = {
+                    body: messageBody,
+                    username: name
+                };             
+                $.ajax({
+                    type: 'POST',
+                    url: 'http://localhost:3000/api/messages',
+                    dataType: 'JSON',
+                    data: message,
+                    success: function(response) {
+                        showMessages();
+                        $('#messageBody').val('');
+                    },
+                    error: function(response) {
+                        console.log(JSON.stringify(response));
+                    }
+                });
+            }            
+            
+            function login(e) {                
+                e.preventDefault();
+                name = $("#nameInput").val();
+                $.ajax({
+                    type: 'POST',
+                    url: 'http://localhost:3000/api/connect',
+                    dataType: 'json',
+                    data: { 'username': name },
+                    success: function(response) {
+                        showMessages();
+                        $("#messagesSection").css('display', 'block');
+                        $("#textInput").css('display', 'block');
+                        $("#loginForm").css('display', 'none');
+                    },
+                    error: function(response) {
+                        alert(JSON.stringify(response.responseJSON.error));
+                    }
+                });
+            }
+
+            function logout(e) {
+                e.preventDefault();
+                $.ajax({
+                    type: 'POST',
+                    url: 'http://localhost:3000/api/disconnect',
+                    dataType: 'json',
+                    data: { 'username': name },
+                    success: function(response) {
+                        $("#messagesSection").css('display', 'none');
+                        $("#textInput").css('display', 'none');
+                        alert("Logged out!");
+                    },
+                    error: function(response) {
+                        alert(JSON.stringify(response.responseJSON.error));
+                    }
+                })
+            }
+            
+            $("#loginForm").submit(login);
+            $("#messageForm").submit(sendMessage);
+            $("#messages").load(showMessages);
+            $("#logout").submit(logout);
+        </script>  
+    </body>
+</html>
