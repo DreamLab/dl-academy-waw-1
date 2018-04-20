@@ -20,34 +20,65 @@
                         <label for="nameInput">Name</label>
                         <input type="name" class="form-control" id="nameInput" placeholder="Enter Name">
                     </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-primary">Zaloguj</button>
                 </form>
             </div>
         </section>
-        <section id="messagesSection" class="container" style="display:none;">
-            <div class="content">
-                <div id="messages"></div>
-            </div>
-        </section> 
-        <section id="textInput" class="container" style="display:none;">
-            <form id="messageForm" method="POST">
-                <div class="form-group">                        
-                    <input type="text" class="form-control form-control-lg" id="messageBody" placeholder="Type your message...">
-                </div>                   
-            </form>
-            <form action="#" id="logout">
-                <button type="submit" class="btn btn-primary mb-2">Logout</button>
-            </form>            
-        </section>
+        <section class="container" id="messagePage">
+            <section id="userList" style="display:none;">
+                    <form action="#" id="logout">
+                        <button type="submit" class="btn btn-primary mb-2">Wyloguj</button>
+                    </form> 
+                    <div class="content">
+                        <div id="users"></div>
+                    </div>
+                </section> 
+                <section id="messagesSection" style="display:none;">
+                    <div class="content">
+                        <div id="messages"></div>
+                    </div>
+                </section> 
+                <section id="textInput" class="container" style="display:none;">
+                    <form id="messageForm" method="POST">
+                        <div class="form-group">                        
+                            <input type="text" class="form-control form-control-lg" id="messageBody" placeholder="Type your message...">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Wyślij</button>                   
+                    </form>           
+                </section>
+        </section>        
         <script>
             var data = {};
+            var users = {};
             var name = '';
             var currentMessages = new Set();
+            var currentUsers = new Set();
+
+            function getUsers () {
+                $.ajax({
+                    type: 'GET',
+                    url: '/users',
+                    dataType: "JSON",
+                    data: data,
+                    xhrFields: {
+                        withCredentials: false
+                    },
+                    success: function(data) {
+                        for(var i=0; i < data.users.length; i++) {
+                            if(!currentUsers.has(data.users[i])){
+                                currentUsers.add(data.users[i]);
+                                console.log(data.users[i]);
+                                $('#users').append('<div id="userlistName">'+ data.users[i]+'</div>');
+                            }                           
+                        }                        
+                    }
+                });
+            }
 
             function showMessages () {
                 $.ajax({
                     type: 'GET',
-                    url: 'http://localhost:3000/api/messages',
+                    url: '/messages',
                     dataType: "JSON",
                     data: data,
                     xhrFields: {
@@ -56,16 +87,26 @@
                     success: function(data) {
                         for(var i = 0; i < data.messages.length; i++) {
                             var timestamp = new Date(parseInt(data.messages[i].timestamp));
-                            var czas = timestamp.toUTCString().slice(0, 22);
+                            var humanTime = timestamp.toUTCString().slice(0, 22);
                             if (!currentMessages.has(data.messages[i].id)) {
                                 currentMessages.add(data.messages[i].id);
-                                $('#messages').append('<div id="' + data.messages[i].id + '"><div class="messageWrapper"><div class="messageContent">' + '<div class="username">' + data.messages[i].username + ':</div><div class="messageBody" id="messageBody_'  +i + '">' + data.messages[i].body + '</div></div><div class="messageTime">' + czas + '</div></div></div>');
-                            }                             
+                                $('#messages').append('<div id="' + data.messages[i].id + '"><div class="messageWrapper"><div class="messageContent">' + '<div class="username">' + data.messages[i].username + ':</div><div class="messageBody" id="messageBody_'  +i + '">' + data.messages[i].body + '</div></div><div class="messageTime">' + humanTime + '</div></div></div>');
+                            } 
+                            var elem = document.getElementById('messages');
+                            elem.scrollTop = elem.scrollHeight;                            
                         }                    
                     }
                 });
             }            
             
+           function refreshMessages () {
+               setTimeout(function() {
+                   showMessages();
+                   refreshMessages();
+                   getUsers();
+               }, 500);
+           }
+
             function sendMessage (e) {
                 e.preventDefault(); 
                 var messageBody = $('#messageBody').val();  
@@ -75,11 +116,10 @@
                 };             
                 $.ajax({
                     type: 'POST',
-                    url: 'http://localhost:3000/api/messages',
+                    url: '/messages',
                     dataType: 'JSON',
                     data: message,
                     success: function(response) {
-                        showMessages();
                         $('#messageBody').val('');
                     },
                     error: function(response) {
@@ -90,17 +130,18 @@
             
             function login(e) {                
                 e.preventDefault();
-                name = $("#nameInput").val();
+                name = $('#nameInput').val();
                 $.ajax({
                     type: 'POST',
-                    url: 'http://localhost:3000/api/connect',
+                    url: '/connect',
                     dataType: 'json',
                     data: { 'username': name },
                     success: function(response) {
                         showMessages();
-                        $("#messagesSection").css('display', 'block');
-                        $("#textInput").css('display', 'block');
-                        $("#loginForm").css('display', 'none');
+                        $('#messagesSection').css('display', 'block');
+                        $('#textInput').css('display', 'block');
+                        $('#userList').css('display', 'block');
+                        $('#loginForm').css('display', 'none');
                     },
                     error: function(response) {
                         alert(JSON.stringify(response.responseJSON.error));
@@ -112,13 +153,14 @@
                 e.preventDefault();
                 $.ajax({
                     type: 'POST',
-                    url: 'http://localhost:3000/api/disconnect',
+                    url: '/disconnect',
                     dataType: 'json',
                     data: { 'username': name },
                     success: function(response) {
-                        $("#messagesSection").css('display', 'none');
-                        $("#textInput").css('display', 'none');
-                        alert("Logged out!");
+                        $('#messagesSection').css('display', 'none');
+                        $('#textInput').css('display', 'none');
+                        $('#userList').css('display', 'none');
+                        $('#loginForm').css('display', 'block');
                     },
                     error: function(response) {
                         alert(JSON.stringify(response.responseJSON.error));
@@ -126,10 +168,11 @@
                 })
             }
             
-            $("#loginForm").submit(login);
-            $("#messageForm").submit(sendMessage);
-            $("#messages").load(showMessages);
-            $("#logout").submit(logout);
+            refreshMessages();
+            $('#loginForm').submit(login);
+            $('#messageForm').submit(sendMessage);
+            $('#messages').load(refreshMessages);
+            $('#logout').submit(logout);
         </script>  
     </body>
 </html>
