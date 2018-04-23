@@ -20,14 +20,14 @@
                         <label for="nameInput">Name</label>
                         <input type="name" class="form-control" id="nameInput" placeholder="Enter Name">
                     </div>
-                    <button type="submit" class="btn btn-primary">Zaloguj</button>
+                    <button type="submit" class="btn btn-primary">Login</button>
                 </form>
             </div>
         </section>
         <section class="container" id="messagePage">
             <section id="userList" style="display:none;">
                     <form action="#" id="logout">
-                        <button type="submit" class="btn btn-primary mb-2">Wyloguj</button>
+                        <button type="submit" class="btn btn-primary mb-2">Logout</button>
                     </form> 
                     <div class="content">
                         <div id="users"></div>
@@ -43,7 +43,7 @@
                         <div class="form-group">                        
                             <input type="text" class="form-control form-control-lg" id="messageBody" placeholder="Type your message...">
                         </div>
-                        <button type="submit" class="btn btn-primary">Wyślij</button>                   
+                        <button type="submit" class="btn btn-primary">Send</button>                   
                     </form>           
                 </section>
         </section>        
@@ -134,13 +134,11 @@
                 $.ajax({
                     type: 'POST',
                     url: '/connect',
-                    dataType: 'json',
+                    dataType: 'JSON',
                     data: { 'username': name },
                     success: function(response) {
                         showMessages();
-                        $('#messagesSection').css('display', 'block');
-                        $('#textInput').css('display', 'block');
-                        $('#userList').css('display', 'block');
+                        $('#messagePage').css('display', 'block');
                         $('#loginForm').css('display', 'none');
                     },
                     error: function(response) {
@@ -154,12 +152,10 @@
                 $.ajax({
                     type: 'POST',
                     url: '/disconnect',
-                    dataType: 'json',
+                    dataType: 'JSON',
                     data: { 'username': name },
                     success: function(response) {
-                        $('#messagesSection').css('display', 'none');
-                        $('#textInput').css('display', 'none');
-                        $('#userList').css('display', 'none');
+                        $('#messagePage').css('display', 'none');
                         $('#loginForm').css('display', 'block');
                     },
                     error: function(response) {

@@ -37,8 +37,8 @@
                 success: function(data) {
                     for(var i = 0; i < data.messages.length; i++) {
                         var timestamp = new Date(parseInt(data.messages[i].timestamp));
-                        var czas = timestamp.toUTCString().slice(0, 22);
-                        $('#messages').append('<div id="' + data.messages[i].id + '"><div class="messageWrapper"><div class="messageContent"><div class="username">' + data.messages[i].username + ':</div><div class="messageBody">' + data.messages[i].body + '</div></div><div class="messageTime">' + czas + '</div></div></div>');
+                        var humanTime = timestamp.toUTCString().slice(0, 22);
+                        $('#messages').append('<div id="' + data.messages[i].id + '"><div class="messageWrapper"><div class="messageContent"><div class="username">' + data.messages[i].username + ':</div><div class="messageBody">' + data.messages[i].body + '</div></div><div class="messageTime">' + humanTime + '</div></div></div>');
                     }                    
                 }
             });
