@@ -9,7 +9,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
 app.use('/', router);
-app.use(express.static('../_additional/frontend/step3'));
+app.use(express.static('../_additional/frontend/'));
 
 app.use((req, res) => res.status(404).send({error: 'Not found'}));
 

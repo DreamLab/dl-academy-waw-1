@@ -2,8 +2,8 @@
     bottom: 0;
     left: 0;
     right: 0;
-    padding-top: 10%;
     margin: 0 auto;
+    height: 20vh;
 }
 
 html, body{
@@ -63,7 +63,7 @@ textarea {
 }
 
 #messages{
-    height: 80vh;
+    height: 60vh;
     overflow-y: scroll;
 }
 

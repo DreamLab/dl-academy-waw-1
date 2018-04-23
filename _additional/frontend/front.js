@@ -1,54 +1,4 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Dreamlab Academy Warsaw</title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-        <link rel="stylesheet" href="style.css">
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    </head>
-    <body>
-        <section id="loginForm">
-            <div class="container">
-                <form id="loginForm" method="POST" action="/">
-                    <div class="form-group">
-                        <label for="nameInput">Name</label>
-                        <input type="name" class="form-control" id="nameInput" placeholder="Enter Name">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Login</button>
-                </form>
-            </div>
-        </section>
-        <section class="container" id="messagePage">
-            <section id="userList" style="display:none;">
-                    <form action="#" id="logout">
-                        <button type="submit" class="btn btn-primary mb-2">Logout</button>
-                    </form> 
-                    <div class="content">
-                        <div id="users"></div>
-                    </div>
-                </section> 
-                <section id="messagesSection" style="display:none;">
-                    <div class="content">
-                        <div id="messages"></div>
-                    </div>
-                </section> 
-                <section id="textInput" class="container" style="display:none;">
-                    <form id="messageForm" method="POST">
-                        <div class="form-group">                        
-                            <input type="text" class="form-control form-control-lg" id="messageBody" placeholder="Type your message...">
-                        </div>
-                        <button type="submit" class="btn btn-primary">Send</button>                   
-                    </form>           
-                </section>
-        </section>        
-        <script>
-            var data = {};
+var data = {};
             var users = {};
             var name = '';
             var currentMessages = new Set();
@@ -64,13 +14,14 @@
                         withCredentials: false
                     },
                     success: function(data) {
+                        $('#users').text('');
                         for(var i=0; i < data.users.length; i++) {
-                            if(!currentUsers.has(data.users[i])){
+                            // if(!currentUsers.has(data.users[i])){
                                 currentUsers.add(data.users[i]);
                                 console.log(data.users[i]);
                                 $('#users').append('<div id="userlistName">'+ data.users[i]+'</div>');
                             }                           
-                        }                        
+                        // }                        
                     }
                 });
             }
@@ -102,8 +53,8 @@
            function refreshMessages () {
                setTimeout(function() {
                    showMessages();
-                   refreshMessages();
                    getUsers();
+                   refreshMessages();                   
                }, 500);
            }
 
@@ -138,8 +89,11 @@
                     data: { 'username': name },
                     success: function(response) {
                         showMessages();
-                        $('#messagePage').css('display', 'block');
-                        $('#loginForm').css('display', 'none');
+                        $('#nameInput').val('');
+                        $('#nameInput').attr('disabled', true);
+                        $('#nameSubmit').attr('disabled', true);
+                        $('#messageBody').attr('disabled', false);
+                        $('#sendButton').attr('disabled', false);
                     },
                     error: function(response) {
                         alert(JSON.stringify(response.responseJSON.error));
@@ -155,11 +109,16 @@
                     dataType: 'JSON',
                     data: { 'username': name },
                     success: function(response) {
-                        $('#messagePage').css('display', 'none');
-                        $('#loginForm').css('display', 'block');
+                        $('#nameInput').val('');
+                        $('#nameInput').attr('disabled', false);
+                        $('#nameSubmit').attr('disabled', false);
+                        $('#messageBody').attr('disabled', true);
+                        $('#sendButton').attr('disabled', true);
+                        refreshMessages();
                     },
                     error: function(response) {
-                        alert(JSON.stringify(response.responseJSON.error));
+
+                        console.log(JSON.stringify(response));
                     }
                 })
             }
@@ -169,6 +128,3 @@
             $('#messageForm').submit(sendMessage);
             $('#messages').load(refreshMessages);
             $('#logout').submit(logout);
-        </script>  
-    </body>
-</html>
