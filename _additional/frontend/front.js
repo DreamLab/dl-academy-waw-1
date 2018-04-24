@@ -17,7 +17,6 @@ var data = {};
                         $('#users').text('');
                         for(var i=0; i < data.users.length; i++) {
                             currentUsers.add(data.users[i]);
-                            console.log(data.users[i]);
                             $('#users').append('<div id="userlistName">'+ data.users[i]+'</div>');
                         }                                                 
                     }
@@ -85,7 +84,7 @@ var data = {};
                         $('#messageBody').val('');
                     },
                     error: function(response) {
-                        console.log(JSON.stringify(response));
+                        console.error(JSON.stringify(response));
                     }
                 });
             }            
@@ -107,7 +106,7 @@ var data = {};
                         $('#logout').attr('disabled', false);
                     },
                     error: function(response) {
-                        alert(JSON.stringify(response.responseJSON.error));
+                        console.error(JSON.stringify(response.responseJSON.error));
                     }
                 });
             }
@@ -128,7 +127,7 @@ var data = {};
                         $('#logout').attr('disabled', true);
                     },
                     error: function(response) {
-                        console.log(JSON.stringify(response));
+                        console.error(JSON.stringify(response));
                     }
                 })
             }
