@@ -9,8 +9,8 @@ class Storage {
 
 	saveMessage(username, body) {
 		const message = {
-			username: username,
-			body: body,
+			username: this._escape(username),
+			body: this._escape(body),
 			timestamp: Date.now(),
 			id: uuidv4()
 		};
@@ -25,8 +25,9 @@ class Storage {
 	connect(username) {
 		const isUserConnected = this.users.includes(username);
 		if (!isUserConnected) {
-			this.users.push(username);
-			return username;
+			const escapedUsername = this._escape(username);
+			this.users.push(escapedUsername);
+			return escapedUsername;
 		}
 		return false;
 	}
@@ -42,6 +43,12 @@ class Storage {
 
 	getUsers() {
 		return this.users;
+	}
+	
+	_escape(string) {
+		return string
+			.replace(/</g, '&lt;')
+			.replace(/>/g, '&gt;');
 	}
 }
 
