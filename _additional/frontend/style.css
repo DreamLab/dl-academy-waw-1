@@ -1,0 +1,93 @@
+#loginForma {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    height: 15vh;
+}
+
+html, body{
+    height: 100vh;
+}
+
+.messageWrapper {
+    background-color: #badaff;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 2px;
+}
+
+.messageTime {
+    text-align: right;
+    font-size: 10px;
+}
+
+.messageContent {
+    display: flex;
+}
+
+.username {
+    font-weight: bold;
+}
+
+.messageBody {
+    padding-left: 5px; 
+}
+
+textarea {
+    resize: none;
+}
+
+#textInput {
+    position: fixed;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+}
+
+#messagesSection {
+    margin: 0 0 10px 0;
+    width: 80%;
+}
+
+#userList{
+    width: 20%;
+    overflow: auto;
+    background: #badaff;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+#logout{
+    background-color: red;
+    border-color: red;
+    width: 50%;
+}
+
+#messages{
+    overflow-y: scroll;
+    height: 70vh;
+}
+
+#messagePage {
+    height: 70vh;
+    display: flex;
+}
+
+button {
+    width: 100%;
+    margin: 3px;
+}
+
+#nameSubmit {
+    width: 50%;
+}
+
+#btnGroup {
+    display: flex;
+}
+
+h3 {
+    text-align: center;
+}
