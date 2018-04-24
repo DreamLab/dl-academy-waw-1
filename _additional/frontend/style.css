@@ -3,7 +3,7 @@
     left: 0;
     right: 0;
     margin: 0 auto;
-    height: 20vh;
+    height: 15vh;
 }
 
 html, body{
@@ -40,37 +40,54 @@ textarea {
 
 #textInput {
     position: fixed;
-    bottom: 0;
+    bottom: 20px;
     left: 0;
     right: 0;
     margin: 0 auto;
 }
 
 #messagesSection {
-    padding: 0 0 102px 0;
+    margin: 0 0 10px 0;
     width: 80%;
 }
 
 #userList{
     width: 20%;
-    padding: 0 0 102px 0;
     overflow: auto;
+    background: #badaff;
+    padding: 10px;
+    border-radius: 10px;
 }
 
-#logout button {
+#logout{
     background-color: red;
     border-color: red;
+    width: 50%;
 }
 
 #messages{
-    height: 60vh;
     overflow-y: scroll;
+    height: 70vh;
 }
 
 #messagePage {
+    height: 70vh;
     display: flex;
 }
 
 button {
     width: 100%;
+    margin: 3px;
+}
+
+#nameSubmit {
+    width: 50%;
+}
+
+#btnGroup {
+    display: flex;
+}
+
+h3 {
+    text-align: center;
 }

@@ -16,12 +16,10 @@ var data = {};
                     success: function(data) {
                         $('#users').text('');
                         for(var i=0; i < data.users.length; i++) {
-                            // if(!currentUsers.has(data.users[i])){
-                                currentUsers.add(data.users[i]);
-                                console.log(data.users[i]);
-                                $('#users').append('<div id="userlistName">'+ data.users[i]+'</div>');
-                            }                           
-                        // }                        
+                            currentUsers.add(data.users[i]);
+                            console.log(data.users[i]);
+                            $('#users').append('<div id="userlistName">'+ data.users[i]+'</div>');
+                        }                                                 
                     }
                 });
             }
@@ -37,18 +35,31 @@ var data = {};
                     },
                     success: function(data) {
                         for(var i = 0; i < data.messages.length; i++) {
-                            var timestamp = new Date(parseInt(data.messages[i].timestamp));
-                            var humanTime = timestamp.toUTCString().slice(0, 22);
                             if (!currentMessages.has(data.messages[i].id)) {
                                 currentMessages.add(data.messages[i].id);
-                                $('#messages').append('<div id="' + data.messages[i].id + '"><div class="messageWrapper"><div class="messageContent">' + '<div class="username">' + data.messages[i].username + ':</div><div class="messageBody" id="messageBody_'  +i + '">' + data.messages[i].body + '</div></div><div class="messageTime">' + humanTime + '</div></div></div>');
+                                $('#messages').append(generateMessage(data.messages[i]));
                             } 
                             var elem = document.getElementById('messages');
                             elem.scrollTop = elem.scrollHeight;                            
                         }                    
                     }
                 });
-            }            
+            }
+            
+            function generateMessage (message) {
+                var timestamp = new Date(parseInt(message.timestamp));
+                var humanTime = timestamp.toUTCString().slice(0, 22);
+                var i = 0;
+                return '<div id="' + message.id + '">' +
+                    '<div class="messageWrapper">' +
+                        '<div class="messageContent">' + 
+                            '<div class="username">' + message.username + ':</div>' +
+                            '<div class="messageBody" id="messageBody_'  +i++ + '">' + message.body + '</div>' +
+                        '</div>' +
+                        '<div class="messageTime">' + humanTime + '</div>' +
+                    '</div>' +
+                '</div>';
+            }
             
            function refreshMessages () {
                setTimeout(function() {
@@ -94,6 +105,7 @@ var data = {};
                         $('#nameSubmit').attr('disabled', true);
                         $('#messageBody').attr('disabled', false);
                         $('#sendButton').attr('disabled', false);
+                        $('#logout').attr('disabled', false);
                     },
                     error: function(response) {
                         alert(JSON.stringify(response.responseJSON.error));
@@ -114,17 +126,20 @@ var data = {};
                         $('#nameSubmit').attr('disabled', false);
                         $('#messageBody').attr('disabled', true);
                         $('#sendButton').attr('disabled', true);
+                        $('#logout').attr('disabled', true);
                         refreshMessages();
                     },
                     error: function(response) {
-
                         console.log(JSON.stringify(response));
                     }
                 })
             }
             
             refreshMessages();
-            $('#loginForm').submit(login);
+            $('#nameSubmit').click(login);
             $('#messageForm').submit(sendMessage);
             $('#messages').load(refreshMessages);
-            $('#logout').submit(logout);
+            $('#logout').click(logout);
+            $('#messageBody').attr('disabled', true);
+            $('#sendButton').attr('disabled', true);
+            $('#logout').attr('disabled', true);

@@ -15,21 +15,22 @@
     <body>
         <section id="loginForm">
             <div class="container">
-                <form id="loginForm" method="POST" action="/">
+                <form id="loginForm" action="/">
                     <div class="form-group">
                         <label for="nameInput">Name</label>
                         <input type="name" class="form-control" id="nameInput" placeholder="Enter Name">
                     </div>
-                    <button type="submit" id="nameSubmit" class="btn btn-primary">Login</button>
+                    <div id="btnGroup">
+                        <button id="nameSubmit" class="btn btn-primary">Login</button>
+                        <button id="logout" class="btn btn-primary">Logout</button>
+                    </div>                    
                 </form>
             </div>
         </section>
         <section class="container" id="messagePage">
             <section id="userList">
-                    <form action="#" id="logout">
-                        <button type="submit" class="btn btn-primary mb-2">Logout</button>
-                    </form> 
                     <div class="content">
+                        <h3>User List</h3>
                         <div id="users"></div>
                     </div>
                 </section> 
@@ -39,7 +40,7 @@
                     </div>
                 </section> 
                 <section id="textInput" class="container">
-                    <form id="messageForm" method="POST">
+                    <form id="messageForm">
                         <div class="form-group">                        
                             <input type="text" class="form-control form-control-lg" id="messageBody" placeholder="Type your message...">
                         </div>
