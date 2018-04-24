@@ -99,7 +99,6 @@ var data = {};
                     dataType: 'JSON',
                     data: { 'username': name },
                     success: function(response) {
-                        showMessages();
                         $('#nameInput').val('');
                         $('#nameInput').attr('disabled', true);
                         $('#nameSubmit').attr('disabled', true);
@@ -127,7 +126,6 @@ var data = {};
                         $('#messageBody').attr('disabled', true);
                         $('#sendButton').attr('disabled', true);
                         $('#logout').attr('disabled', true);
-                        refreshMessages();
                     },
                     error: function(response) {
                         console.log(JSON.stringify(response));
@@ -138,7 +136,6 @@ var data = {};
             refreshMessages();
             $('#nameSubmit').click(login);
             $('#messageForm').submit(sendMessage);
-            $('#messages').load(refreshMessages);
             $('#logout').click(logout);
             $('#messageBody').attr('disabled', true);
             $('#sendButton').attr('disabled', true);
